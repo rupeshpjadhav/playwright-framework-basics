@@ -18,7 +18,7 @@ A study project covering all the fundamental concepts and patterns of the Playwr
 | `allure-playwright` | ^3.10.2 | Allure reporter integration |
 | `allure-js-commons` | ^3.10.2 | Allure metadata API (feature, story, severity, links) |
 | `allure-commandline` | ^2.43.0 | Generate and open Allure HTML reports |
-| Browsers | Chromium, Firefox, WebKit | Configured as Playwright projects |
+| Browsers | Chromium (Chrome) | Only active Playwright project — Firefox removed, WebKit disabled |
 
 ---
 
@@ -32,7 +32,7 @@ playwright-framework-basics/
 ├── .github/
 │   └── workflows/
 │       └── playwright.yml                # GitHub Actions CI
-├── playwright.config.ts                  # 3 browser projects, 3 reporters, global setup/teardown
+├── playwright.config.ts                  # 1 browser project (Chromium), 3 reporters, global setup/teardown
 ├── tsconfig.json
 ├── package.json                          # Dependencies + npm scripts
 ├── README.md
@@ -121,19 +121,19 @@ Common commands have npm script aliases; the raw `npx` form is shown alongside.
 
 | Task | npm script | Raw command |
 |---|---|---|
-| Full suite (3 browsers) | `npm test` | `npx playwright test` |
+| Full suite (Chromium) | `npm test` | `npx playwright test --project=chromium` |
 | Single browser | `npm run test:chromium` | `npx playwright test --project=chromium` |
 | Single file | — | `npx playwright test tests/login-page-object-model.spec.ts` |
-| Headed mode | `npm run test:headed` | `npx playwright test --headed` |
-| UI mode | `npm run test:ui` | `npx playwright test --ui` |
-| Smoke / sanity / regression | `npm run test:smoke` · `test:sanity` · `test:regression` | `npx playwright test --grep "@smoke"` |
+| Headed mode | `npm run test:headed` | `npx playwright test --headed --project=chromium` |
+| UI mode | `npm run test:ui` | `npx playwright test --ui --project=chromium` |
+| Smoke / sanity / regression | `npm run test:smoke` · `test:sanity` · `test:regression` | `npx playwright test --grep "@smoke" --project=chromium` |
 | Visual tests (Chromium) | `npm run test:visual` | `npx playwright test tests/login-visual.spec.ts --project=chromium` |
 | Tutorials mini-project | `npm run test:tutorials` | `npx playwright test --config=tutorials/playwright.config.ts` |
 | HTML report | `npm run report` | `npx playwright show-report` |
 | Generate Allure report | `npm run allure:generate` | `npx allure generate allure-results --clean -o allure-report` |
 | Open Allure report | `npm run allure:open` | `npx allure open allure-report` |
 | Serve Allure in one step | `npm run allure:serve` | `npx allure serve allure-results` |
-| Install browsers | `npm run install:browsers` | `npx playwright install` |
+| Install browsers | `npm run install:browsers` | `npx playwright install chromium` |
 
 Generate a test from a browser session:
 
@@ -161,7 +161,7 @@ node tutorials/02-manual-way.js
 | Trace collection | On first retry | On first retry |
 | Global setup/teardown | `tests/global/*.ts` | Same |
 | Reporters | HTML + custom + Allure | Same |
-| Browsers | Chromium, Firefox, WebKit | Chromium, Firefox, WebKit |
+| Browsers | Chromium | Chromium |
 
 ### tsconfig.json
 
@@ -181,14 +181,14 @@ node tutorials/02-manual-way.js
 | Project | Device | Status |
 |---------|--------|--------|
 | chromium | Desktop Chrome | Active |
-| firefox | Desktop Firefox | Active |
-| webkit | Desktop Safari | Active |
+| firefox | Desktop Firefox | Removed — caused 100% CPU / unresponsive machine |
+| webkit | Desktop Safari | Commented out (all runs Chrome-only) |
 | Mobile Chrome | Pixel 5 | Commented out |
 | Mobile Safari | iPhone 12 | Commented out |
 | Microsoft Edge | Desktop Edge | Commented out |
 | Google Chrome | Desktop Chrome (branded) | Commented out |
 
-> Visual-regression baselines are committed for Chromium/macOS only, so `login-visual.spec.ts` skips Firefox and WebKit (see §21).
+> Every command runs Chromium only. Visual-regression baselines are committed for Chromium/macOS only, and `login-visual.spec.ts` still skips any non-Chromium project as a guard (see §21).
 
 ---
 
@@ -1536,7 +1536,7 @@ test.beforeAll(() => {
 | `interactions-drag-drop.spec.ts` | 4 | Drag and drop — 3 methods | Hardcoded |
 | **Total** | **134** | | |
 
-Counts are per spec file. With the three browser projects the full run executes **402** tests (134 × 3). Files under `tutorials/` are outside `testDir` and run with their own config.
+Counts are per spec file. Chromium is the only active browser project, so the full run executes **134** tests. Files under `tutorials/` are outside `testDir` and run with their own config.
 
 ---
 
@@ -1573,14 +1573,14 @@ Playwright automatically waits for elements to be actionable before performing a
 - **Local:** Tests run in parallel across files (`fullyParallel: true`)
 - **CI:** Tests run sequentially (`workers: 1`) for stability
 
-### Multi-Browser Testing
+### Browser Testing
 
-All tests run across 3 browser engines via Playwright projects:
-- **Chromium** — Desktop Chrome
-- **Firefox** — Desktop Firefox
-- **WebKit** — Desktop Safari
+Runs are **Chromium-only** via a single Playwright project:
+- **Chromium** — Desktop Chrome (active)
 
-Exception: `login-visual.spec.ts` skips Firefox and WebKit because only Chromium/macOS baselines are committed. Run it with `--project=chromium` or `npm run test:visual`.
+Firefox was removed because it drove sustained 100% CPU usage and made the machine unresponsive during full-suite runs. WebKit is commented out as well so no command can start a non-Chromium engine. Re-enable either by uncommenting its project block in `playwright.config.ts`.
+
+`login-visual.spec.ts` skips any non-Chromium project as a guard, because only Chromium/macOS baselines are committed. Run it with `--project=chromium` or `npm run test:visual`.
 
 ### Retry Logic
 
@@ -1600,7 +1600,7 @@ Exception: `login-visual.spec.ts` skips Firefox and WebKit because only Chromium
 - [x] **Comprehensive comments** in example files — learning-friendly with explanations
 - [x] **CI/CD integration** via GitHub Actions — automated test runs on push/PR
 - [x] **HTML report generation** — visual test results for debugging
-- [x] **Multi-browser testing** — tests verified across Chromium, Firefox, WebKit
+- [x] **Browser testing** — Chromium (Chrome) project; Firefox removed and WebKit disabled to keep runs stable on this machine
 - [x] **TypeScript for type safety** — catches errors at compile time
 - [x] **Trace collection on retry** — automatic debugging data for failed tests
 - [x] **Auto-waiting assertions** — no manual `sleep()` or `waitFor()` needed
@@ -1654,7 +1654,7 @@ The three reporters run simultaneously and each receives the same events. `playw
 | `Environment variable APP_URL is not set` | No `.env` file | `cp .env.example .env` |
 | Global setup logs `Base URL: undefined` | `.env` missing when `globalSetup` ran | Create `.env`; it is loaded once for the whole run |
 | `Executable doesn't exist …` / browser won't launch | Browsers not installed | `npm run install:browsers` (`npx playwright install`) |
-| Visual tests skipped on Firefox/WebKit | Only Chromium baselines are committed | Expected — or regenerate per browser with `--update-snapshots` |
+| Visual tests skipped on a non-Chromium project | Only Chromium baselines are committed | Expected — run with `--project=chromium` |
 | Visual test fails after an intentional UI change | Baseline is outdated | `npx playwright test tests/login-visual.spec.ts --update-snapshots` |
 | `allure: command not found` | Calling a global `allure` | Use `npx allure …` or `npm run allure:generate` |
 | Allure report is empty | Tests not re-run after configuring the reporter, or raw data cleared | Re-run the tests, then generate |

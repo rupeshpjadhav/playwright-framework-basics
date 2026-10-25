@@ -54,8 +54,8 @@ npm init -y
 # install Playwright Test as a dev dependency
 npm install -D @playwright/test
 
-# install Playwright browsers (Chromium, Firefox, WebKit)
-npx playwright install
+# install Chromium (this project runs Chrome-only)
+npx playwright install chromium
 
 # scaffold a Playwright Test config and example tests
 npx playwright test --init
@@ -166,7 +166,7 @@ npx playwright test tests/my-new-test.spec.ts
 4. To run against a specific browser project configured in `playwright.config.ts`:
 
 ```bash
-npx playwright test --project=firefox
+npx playwright test --project=chromium
 ```
 
 Created by assistant — modify as needed for your project's conventions.

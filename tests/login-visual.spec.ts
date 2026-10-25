@@ -37,8 +37,9 @@ import { test, expect } from "@playwright/test";
 
 // Baselines are committed for Chromium/macOS only
 // (tests/login-visual.spec.ts-snapshots/*-chromium-darwin.png).
-// Skip the other engines so a full `npx playwright test` run does not fail
-// on missing Firefox/WebKit snapshots. Regenerate with:
+// Only Chromium is enabled in playwright.config.ts, but keep this guard so the
+// suite stays green if another engine is re-enabled without its own baselines.
+// Regenerate with:
 //   npx playwright test tests/login-visual.spec.ts --update-snapshots
 test.beforeEach(async ({ browserName }) => {
   test.skip(browserName !== "chromium", "Visual baselines are Chromium-only");

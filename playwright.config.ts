@@ -50,22 +50,32 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
 
-  /* Configure projects for major browsers */
+  /* Configure projects for major browsers.
+   *
+   * Chromium only: a full-suite run on this machine is kept to Chrome.
+   * Firefox was removed because it drove sustained 100% CPU usage and left
+   * the machine unresponsive during full-suite runs. WebKit is disabled too
+   * so a plain `npx playwright test` never launches anything but Chrome.
+   */
   projects: [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
 
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
+    // Firefox — removed (machine hangs / 100% CPU during full-suite runs).
+    // Re-add if you need it:
+    // {
+    //   name: 'firefox',
+    //   use: { ...devices['Desktop Firefox'] },
+    // },
 
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
+    // WebKit — disabled to keep every run Chrome-only.
+    // Re-add if you need Safari coverage:
+    // {
+    //   name: 'webkit',
+    //   use: { ...devices['Desktop Safari'] },
+    // },
 
     /* Test against mobile viewports. */
     // {
