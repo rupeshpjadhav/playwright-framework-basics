@@ -7,7 +7,7 @@
 npm init playwright@latest    # Scaffold a new Playwright test project
 # or
 npm i -D @playwright/test     # Install the test runner and browsers
-npx playwright install chromium # Download Chromium only (this project runs Chrome-only)
+npx playwright install        # Download the browsers (chromium, firefox, webkit)
 ```
 
 ## Your first test
@@ -42,9 +42,9 @@ export default defineConfig({                     // Export a config object
     navigationTimeout: 30_000                     // Timeout for navigation (goto, wait)
   },
   projects: [                                     // Matrix of browser projects to run
-    { name: 'chromium' }                          // This project: Chromium only
-    // { name: 'firefox' },                       // Firefox removed (100% CPU / hangs)
-    // { name: 'webkit' }                         // Re-enable for Safari coverage
+    { name: 'chromium' },
+    { name: 'firefox' },
+    { name: 'webkit' }
   ],
   webServer: {                                    // Auto-start a dev server before tests
     command: 'npm run start',                     // Command to start the server
