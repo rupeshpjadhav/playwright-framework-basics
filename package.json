@@ -1,0 +1,39 @@
+{
+  "name": "playwright-framework-basics",
+  "version": "1.0.0",
+  "description": "Study project covering Playwright fundamentals and patterns with TypeScript",
+  "scripts": {
+    "test": "playwright test",
+    "test:chromium": "playwright test --project=chromium",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:sanity": "playwright test --grep @sanity",
+    "test:regression": "playwright test --grep @regression",
+    "test:visual": "playwright test tests/login-visual.spec.ts --project=chromium",
+    "test:tutorials": "playwright test --config=tutorials/playwright.config.ts",
+    "report": "playwright show-report",
+    "allure:generate": "allure generate allure-results --clean -o allure-report",
+    "allure:open": "allure open allure-report",
+    "allure:serve": "allure serve allure-results",
+    "install:browsers": "playwright install"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@faker-js/faker": "^10.5.0",
+    "@playwright/test": "^1.61.1",
+    "@types/node": "^26.0.1",
+    "@types/winston": "^2.4.4",
+    "allure-commandline": "^2.43.0",
+    "allure-js-commons": "^3.10.2",
+    "allure-playwright": "^3.10.2",
+    "dotenv": "^17.4.2",
+    "winston": "^3.19.0"
+  },
+  "allowScripts": {
+    "@types/node@26.0.1": true
+  }
+}

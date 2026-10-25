@@ -1,0 +1,23 @@
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+tests/data/.auth/
+logs/
+allure-results/
+allure-report/
+
+# Secrets & local environment
+.env
+.env.*
+!.env.example
+
+# Local / OS / editor
+.venv/
+.DS_Store
+.claude/
+.claude/settings.local.json

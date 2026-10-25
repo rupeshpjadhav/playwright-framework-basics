@@ -1,0 +1,11 @@
+# Normalize line endings so copying the repo between macOS/Windows/Linux
+# does not show every file as modified.
+* text=auto eol=lf
+
+# Binary assets — never convert line endings
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.docx binary
+*.zip binary

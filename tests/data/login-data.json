@@ -1,0 +1,14 @@
+{
+  "url": "https://practicetestautomation.com/practice-test-login/",
+  "valid": {
+    "username": "student",
+    "password": "Password123",
+    "expectedMessage": "Logged In Successfully"
+  },
+  "invalid": {
+    "username": "invaliduser",
+    "password": "invalidpassword",
+    "expectedUsernameError": "Your username is invalid!",
+    "expectedPasswordError": "Your password is invalid!"
+  }
+}
